@@ -1,0 +1,1 @@
+This is a fork of the [Horion injector](https://github.com/HorionContinued/Injector/). I wanted to fix some bugs, change, and add different stuff that it didn't have currently. This is most likely detected by anti-viruses, so if you choose to use it, add it to the [exclusions](https://www.youtube.com/watch?v=yD2nJQKRmU0). 
