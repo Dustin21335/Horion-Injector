@@ -28,11 +28,10 @@ namespace HorionInjector
 
         public MainWindow()
         {
-            if (!_mutex.WaitOne(0, false)) 
+            if (!_mutex.WaitOne(0, false))
             {
                 MessageBox.Show("Horion Injector is already open!");
-                IntPtr handle = Process.GetCurrentProcess().MainWindowHandle;
-                if (handle != IntPtr.Zero) SetForegroundWindow(handle);
+                Process.GetProcessesByName("HorionInjector").Where(p => p.MainWindowHandle != IntPtr.Zero).ToList().ForEach(p => SetForegroundWindow(p.MainWindowHandle));
                 Application.Current.Shutdown();
                 return;
             }
