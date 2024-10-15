@@ -1,9 +1,12 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Shapes;
 using Path = System.IO.Path;
 
@@ -13,10 +16,9 @@ namespace HorionInjector
     {
         private void CheckForUpdate()
         {
-            MessageBox.Show(GetVersion().ToString());
             WaitForConnection(5);
-            var latestVersion = Version.Parse(new WebClient().DownloadString(""));
-            if (latestVersion > GetVersion() && MessageBox.Show("New update available! Do you want to update now?", null, MessageBoxButton.YesNo) == MessageBoxResult.Yes) Update();
+            var latestVersion = Version.Parse(new WebClient().DownloadString("https://raw.githubusercontent.com/Dustin21335/Horion-Injector/refs/heads/main/HorionInjector/version"));
+            if (latestVersion > GetVersion() && MessageBox.Show("New update available! Do you want to update now?", "Update", MessageBoxButton.YesNo) == MessageBoxResult.Yes) Update();
         }
 
         private void Update()
@@ -24,10 +26,11 @@ namespace HorionInjector
             string Injector = Assembly.GetExecutingAssembly().Location;
             string OldInjector = Path.ChangeExtension(Injector, ".old");
             File.Move(Injector, OldInjector);
-            new WebClient().DownloadFile("", Injector);
-            MessageBox.Show("Updater is done! The injector will now restart.");
+            new WebClient().DownloadFile("https://github.com/Dustin21335/Horion-Injector/releases/download/Release/HorionInjector.exe", Injector);
+            string CleanUpBat = Path.Combine(Path.GetTempPath(), "CleanUp.bat");
+            File.WriteAllText(CleanUpBat, $"@echo off\nif exist \"{OldInjector}\" del \"{OldInjector}\"\n");
             Process.Start(Injector);
-            if (File.Exists(OldInjector)) File.Delete(OldInjector);
+            Process.Start(new ProcessStartInfo { FileName = CleanUpBat, WindowStyle = ProcessWindowStyle.Hidden });
             Application.Current.Shutdown();
         }
     }
