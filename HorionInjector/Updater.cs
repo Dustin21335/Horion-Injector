@@ -17,7 +17,7 @@ namespace HorionInjector
         private void CheckForUpdate()
         {
             WaitForConnection(5);
-            var latestVersion = Version.Parse(new WebClient().DownloadString("https://raw.githubusercontent.com/Dustin21335/Horion-Injector/refs/heads/main/HorionInjector/version"));
+            var latestVersion = Version.Parse(new WebClient().DownloadString("https://github.com/Dustin21335/Horion-Injector/releases/download/Release/version"));
             if (latestVersion > GetVersion() && MessageBox.Show("New update available! Do you want to update now?", "Update", MessageBoxButton.YesNo) == MessageBoxResult.Yes) Update();
         }
 
