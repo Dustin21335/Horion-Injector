@@ -25,10 +25,11 @@ namespace HorionInjector
         private static readonly Mutex _mutex = new Mutex(true, "HorionInjector");
         private static Process MinecraftClient = Process.GetProcessesByName("Minecraft.Windows").FirstOrDefault();
         private static string _InjectionStatus;
+        private static readonly string OldPath = Path.ChangeExtension(Assembly.GetExecutingAssembly().Location, "old");
 
         public MainWindow()
         {
-            if (!_mutex.WaitOne(0, false))
+            if (!File.Exists(OldPath) && !_mutex.WaitOne(0, false))
             {
                 MessageBox.Show("Horion Injector is already open!");
                 Process.GetProcessesByName("HorionInjector").Where(p => p.MainWindowHandle != IntPtr.Zero).ToList().ForEach(p => SetForegroundWindow(p.MainWindowHandle));
