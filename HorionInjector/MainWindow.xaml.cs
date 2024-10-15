@@ -54,8 +54,8 @@ namespace HorionInjector
 
         private void InjectButton_Left(object sender, RoutedEventArgs e)
         {
-            if (_InjectionStatus == "Injected") return;
-            if (!CheckConnection()) WaitForConnection(10);
+            if (_InjectionStatus == "Injected" || _InjectionStatus == "Injecting") return;
+            if (!CheckConnection()) WaitForConnection(5);
             WebClient wc = new WebClient();
             wc.DownloadFileCompleted += (_, __) => Inject(Path.Combine(Path.GetTempPath(), "Horion.dll"));
             wc.DownloadFileAsync(new Uri("https://horion.download/bin/Horion.dll"), Path.Combine(Path.GetTempPath(), "Horion.dll"));
